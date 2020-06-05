@@ -116,4 +116,6 @@ function gameLoop(timeStamp) {
 
 	window.requestAnimationFrame(gameLoop);
 }
-window.requestAnimationFrame(gameLoop);
+window.onload=()=>{
+	window.requestAnimationFrame(gameLoop);
+}

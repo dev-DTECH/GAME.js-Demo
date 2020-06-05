@@ -19,9 +19,11 @@ player.ay = -gravity;
 
 player.jumping = false;
 
+// console.log("ground")
+
 let ground = new GAME.object("resources/2dplatform.png", 100, 1);
 ground.y = -ground.height / 2;
-// console.log(ground.image)
+// console.log(ground.height)
 
 let plank_ar = [];
 for (let i = 0; i < noOfPlanks; i++) {
@@ -39,12 +41,7 @@ let index = 0;
 
 let controller = new GAME.controller([" "]);
 
-function gameLoop(timeStamp) {
-	let dt = timeStamp - lastTime;
-	lastTime = timeStamp;
-
-	// GAME.clear();
-
+GAME.loop = (dt) => {
 	if (plank_ar[index].x < -(GAME.width / 2 - plank_ar[index].width / 2))
 		plank_ar[index].vx = +plankVelocity;
 	if (plank_ar[index].x > GAME.width / 2 - plank_ar[index].width / 2)
@@ -73,17 +70,16 @@ function gameLoop(timeStamp) {
 				plank_ar[index].y = plank_ar[i].height / 2;
 
 				// console.log(Math.pow(-1, Math.round(Math.random())));
-				xVector=Math.pow(-1, Math.round(Math.random()))
-				if(xVector==-1)
-				plank_ar[index].x = GAME.width / 2 + plank_ar[i].width / 2;
-				else
-				plank_ar[index].x = -(GAME.width / 2 + plank_ar[i].width / 2);
-				plank_ar[index].vx =
-					xVector * plankVelocity;
+				xVector = Math.pow(-1, Math.round(Math.random()));
+				if (xVector == -1)
+					plank_ar[index].x = GAME.width / 2 + plank_ar[i].width / 2;
+				else plank_ar[index].x = -(GAME.width / 2 + plank_ar[i].width / 2);
+				plank_ar[index].vx = xVector * plankVelocity;
 			}
 		} else if (GAME.collisionsBetween(player, plank_ar[index])) {
 			console.log("You fall off the stack");
-			return;
+			// return;
+			GAME.pause();
 		}
 
 		player.jumping = false;
@@ -96,9 +92,81 @@ function gameLoop(timeStamp) {
 	for (let i = 0; i < plank_ar.length; i++) {
 		GAME.render(plank_ar[i], dt);
 	}
+};
+window.onload = () => {
+	ground.y = -ground.height / 2;
+	for (let i = 0; i < noOfPlanks; i++) {
+		// plank_ar[i] = new GAME.object("resources/plank.png", sizeOfPlank, 1);
+		plank_ar[i].x = GAME.width / 2 + plank_ar[i].width / 2;
+		plank_ar[i].y = plank_ar[i].height / 2;
+		// plank_ar[i].points=[
+		//     {x}
+		// ]
+	}
+	GAME.start();
+};
+// GAME.start();
 
-	window.requestAnimationFrame(gameLoop);
-}
+// function gameLoop(timeStamp) {
+// 	let dt = timeStamp - lastTime;
+// 	lastTime = timeStamp;
+
+// 	// GAME.clear();
+
+// 	if (plank_ar[index].x < -(GAME.width / 2 - plank_ar[index].width / 2))
+// 		plank_ar[index].vx = +plankVelocity;
+// 	if (plank_ar[index].x > GAME.width / 2 - plank_ar[index].width / 2)
+// 		plank_ar[index].vx = -plankVelocity;
+
+// 	if (controller.key[0].pressed) player.vy = playerJumpVelcity;
+
+// 	// // player.y = player.height/2;
+// 	if (player.y <= player.height / 2) {
+// 		// player.vy=0;
+// 		// player.update=false
+// 		player.y = player.height / 2;
+
+// 		if (player.jumping) {
+// 			if (GAME.collisionsBetween(player, plank_ar[index])) {
+// 				console.log("You hit the plank");
+// 				plank_ar[index].vx = 0;
+
+// 				for (let i = 0; i < plank_ar.length; i++) {
+// 					plank_ar[i].y -= plank_ar[i].height;
+// 				}
+// 				ground.y -= plank_ar[i].height;
+
+// 				index++;
+// 				if (index == noOfPlanks) index = 0;
+// 				plank_ar[index].y = plank_ar[i].height / 2;
+
+// 				// console.log(Math.pow(-1, Math.round(Math.random())));
+// 				xVector=Math.pow(-1, Math.round(Math.random()))
+// 				if(xVector==-1)
+// 				plank_ar[index].x = GAME.width / 2 + plank_ar[i].width / 2;
+// 				else
+// 				plank_ar[index].x = -(GAME.width / 2 + plank_ar[i].width / 2);
+// 				plank_ar[index].vx =
+// 					xVector * plankVelocity;
+// 			}
+// 		} else if (GAME.collisionsBetween(player, plank_ar[index])) {
+// 			console.log("You fall off the stack");
+// 			return;
+// 		}
+
+// 		player.jumping = false;
+// 	} else {
+// 		player.jumping = true;
+// 	}
+// 	GAME.render(background, dt);
+// 	GAME.render(player, dt);
+// 	GAME.render(ground, dt);
+// 	for (let i = 0; i < plank_ar.length; i++) {
+// 		GAME.render(plank_ar[i], dt);
+// 	}
+
+// 	window.requestAnimationFrame(gameLoop);
+// }
 // plank_ar[index].vx=-plankVelocity
-window.requestAnimationFrame(gameLoop);
+// window.requestAnimationFrame(gameLoop);
 // GAME.editor.open(["ground", "player", "plank_ar[0]", "test"]);
